@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+        <link href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('/css/jquery.notyfy.css') }}" rel="stylesheet">
+        <link href="{{ asset('/css/notyfy.theme.default.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        <script src="{{ asset('js/jquery-1.9.1.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('/js/jquery.form.min.js') }}" ></script>
+        <script src="{{ asset('/js/jquery.notyfy.js') }}"></script>
+        <script src="{{ asset('/js/bootbox.min.js') }}"></script>
+        <script src="{{ asset('/js/modals.init.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

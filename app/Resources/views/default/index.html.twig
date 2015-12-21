@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Cajero Automático
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Cajero Automático</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Cajero Automático
+                        </div>
+                        <div class="panel-body">
+                            <form id="sky-form" name="sky-form" method="post">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label>¿Qué monto desea obtener?</label>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" name="monto" id="monto" value="0" class="form-control" placeholder="Monto">
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                        <p>Billetes dispobibles: $100, $50, $20, $10</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <br>
+                                            <button type="submit" class="btn btn-default pull-right" id="success1"><i class='fa fa-fw fa-check-square-o'></i> Retirar</button>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top: 50px;">
+                                    <div class="col-lg-3">
+                                        Billetes de 100: <b id="b100"></b>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        Billetes de 50: <b id="b50"></b>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        Billetes de 20: <b id="b20"></b>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        Billetes de 10: <b id="b10"></b>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.panel -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
+    h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
+    h1 { font-size: 36px; }
+    h2 { font-size: 21px; margin-bottom: 1em; }
+    p { margin: 0 0 1em 0; }
+    a { color: #0000F0; }
+    a:hover { text-decoration: none; }
+    code { background: #F5F5F5; max-width: 100px; padding: 2px 6px; word-wrap: break-word; }
+    #wrapper { background: #FFF; margin: 1em auto; max-width: 800px; width: 95%; }
+    #container { padding: 2em; }
+    #welcome, #status { margin-bottom: 2em; }
+    #welcome h1 span { display: block; font-size: 75%; }
+    #icon-status, #icon-book { float: left; height: 64px; margin-right: 1em; margin-top: -4px; width: 64px; }
+    #icon-book { display: none; }
+
+    @media (min-width: 768px) {
+        #wrapper { width: 80%; margin: 2em auto; }
+        #icon-book { display: inline-block; }
+        #status a, #next a { display: block; }
+
+        @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
+    }
+</style>
+{% endblock %}
+{% block javascripts %}
+<script>
+    $('#success1').bind('click',function(e){
+        e.preventDefault();
+        var $monto= $('#monto').val();
+        var $modulo= $monto % 10;
+        if($monto == 0){
+            notyfy({
+                text: 'No existen multiplos de su cantidad',
+                type: 'warning',
+                dismissQueue: true,
+                layout: 'top',
+                buttons: false
+            });
+        }
+        else if($modulo > 0){
+            notyfy({
+                    text: 'Por favor ingrese un monto',
+                    type: 'warning',
+                    dismissQueue: true,
+                    layout: 'top',
+                    buttons: false
+            });
+        }
+        else {
+            $.ajax({
+                url: '/app_dev.php/billetes',
+                data: $('#sky-form').serialize(),
+                type: 'POST',
+                dataType: 'json',
+                success: function (e) {
+                    $('#b100').html(e['b100']);
+                    $('#b50').html(e['b50']);
+                    $('#b20').html(e['b20']);
+                    $('#b10').html(e['b10']);
+                },
+                error: function () {
+                    console.log('existió un problema');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,7 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+billetes:
+        path:      /billetes
+        defaults:  { _controller: AppBundle:Default:billetes }
